@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vehicle Dashboard with map and control features including speed, gear, brake, and steering system.">
+    <meta name="keywords" content="vehicle dashboard, speed control, gear control, brake system, steering control, map display, autonomous vehicle">
+    <meta name="author" content="Praveen Kumar N.">
+    <title>Vehicle Dashboard with Map</title>
+
+    <!-- Leaflet CSS for map styling -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+
+    <!-- Leaflet JS for map functionalities -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <!-- Firebase SDK for database interaction -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <!-- Link to custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <!-- TG Logo on the left -->
+            <img src="1TiHAN.png" alt="TIHAN" class="logo left">
+            <!-- Dashboard Title -->
+            <h1>TIHAN - Autonomous Navigation Vehicle</h1>
+            <!-- ARAI Logo on the right -->
+            <img src="IITH.png" alt="IITH" class="logo right">
+        </header>
+
+        <main class="dashboard">
+            <!-- Speed Box: Display and Control Speed -->
+            <div class="box speed-box">
+                <h3>SPEED</h3>
+                <div class="speed-value">
+                    <h2 id="speed-value">0</h2>
+                </div>
+                <div class="speed-controls">
+                    <button id="increase-speed" class="glow-on-hover">+</button>
+                    <button id="decrease-speed" class="glow-on-hover">-</button>
+                </div>
+            </div>
+
+            <!-- Gear Box: Display and Control Gears -->
+            <div class="box gear-box">
+                <h3>GEAR</h3>
+                <div class="gear-value">
+                    <h2>N</h2>
+                </div>
+                <div class="gear-controls">
+                    <button id="gear-n" class="glow-on-hover">N</button>
+                    <button id="gear-f" class="glow-on-hover">F</button>
+                    <button id="gear-r" class="glow-on-hover">R</button>
+                </div>
+            </div>
+<!-- Brake Box: Apply and Remove Brake -->
+<div class="box brake-box">
+    <h3>BRAKE</h3>
+    <div class="brake-controls">
+        <button id="apply-brake" class="glow-on-hover" onclick="applyFunction()"><h5 style="font-size: 15px;"><b>APPLY BRAKE</b></h5></button>
+        <button id="remove-brake" class="glow-on-hover" onclick="removeFunction()"><h5 style="font-size: 13px;"><b>REMOVE BRAKE</b></h5></button>
+    </div>
+</div>
+<br>
+<br>
+
+     <!-- Steering Box: Controls for Steering -->
+<div class="box steering-box">
+    <h3>STEERING</h3>
+
+    <div class="steering-content">
+        <!-- Left Side: Steering Image -->
+        <div class="steering-image-container">
+            <img src="sterring.png" alt="Steering Wheel" class="steering-image" id="steering-wheel">
+        </div>
+
+        <!-- Right Side: Buttons and Feedback Angle -->
+        <div class="steering-controls-container">
+            <div class="steering-controls">
+                <button id="turn-left" class="glow-on-hover large-btn"><h4 style="font-size: 15px;"><b>LEFT</b></h4></button>
+                <button id="turn-right" class="glow-on-hover large-btn"><h4 style="font-size: 15px;"><b>RIGHT</b></h4></button>
+            </div>
+            
+            <!-- Feedback Box Section -->
+            <label for="feedback-angle" class="feedback-label">Feedback Angle</label>
+            <div class="feedback-container">         
+                <input type="number" id="feedback-angle" class="feedback-input" value="0" readonly>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- Map Box: Map to display vehicle location -->
+
+            <div id="map" class="glow-on-hover"></div>
+        
+        </main>
+    </div>
+
+    <!-- Link to custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+
+</html>

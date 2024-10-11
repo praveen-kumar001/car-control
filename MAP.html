@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Mapping - Autonomous Campus Shuttle</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        #map {
+            width: 80%;
+            height: 80vh;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Live Mapping for Autonomous Campus Shuttle</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <!-- Firebase JavaScript SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase initialization
+        var firebaseConfig = {
+            apiKey: "AIzaSyBPCyckrluV2nf47iHrU6gHww_w9RL4fmY",
+            authDomain: "tracking-b6129.firebaseapp.com",
+            databaseURL: "https://tracking-b6129-default-rtdb.firebaseio.com",
+            projectId: "tracking-b6129",
+            storageBucket: "tracking-b6129.appspot.com",
+            messagingSenderId: "936480928391",
+            appId: "1:936480928391:web:b1294b4c349648bd6afe22",
+            measurementId: "G-ZLR8ZD8PKV"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Create a Leaflet map and marker
+        var map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=oh7BURc4xb9R9sqICJtg', {
+            attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Set the maximum zoom level to 18
+        map.setMaxZoom(18);
+
+        var marker = L.marker([0, 0]).addTo(map);
+
+        // Firebase reference to 'location'
+        var locationRef = firebase.database().ref('location');
+
+        // Listen for changes in the 'location' data in Firebase
+        locationRef.on('value', function(snapshot) {
+            var location = snapshot.val();
+            console.log("Firebase data:", location); // Log the Firebase data
+
+            if (location && location.latitude && location.longitude) {
+                var lat = location.latitude;
+                var lng = location.longitude;
+
+                // Update the Leaflet marker position
+                marker.setLatLng([lat, lng]);
+
+                // Set the map view to the updated coordinates with a higher zoom level
+                map.setView([lat, lng], 18); // Adjust the zoom level if necessary
+            }
+        });
+    </script>
+</body>
+
+</html>
